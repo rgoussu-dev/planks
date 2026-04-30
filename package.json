@@ -1,0 +1,43 @@
+{
+  "name": "@rgoussu-dev/planks",
+  "version": "0.1.0",
+  "description": "Fundamental layout web components",
+  "type": "module",
+  "main": "./dist/planks.umd.cjs",
+  "module": "./dist/planks.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/planks.js",
+      "require": "./dist/planks.umd.cjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./tokens": "./dist/tokens.css",
+    "./styles": "./dist/styles.css"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "vite build --watch",
+    "build": "vite build && tsc --emitDeclarationOnly && cp src/styles/tokens.css dist/ && cp src/styles/styles.css dist/",
+    "type-check": "tsc --noEmit",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
+  "devDependencies": {
+    "@storybook/addon-a11y": "^10.1.11",
+    "@storybook/html-vite": "^10.1.11",
+    "storybook": "^10.1.11",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.11"
+  },
+  "keywords": [
+    "web-components",
+    "layout",
+    "every-layout",
+    "css",
+    "design-system"
+  ],
+  "license": "MIT"
+}

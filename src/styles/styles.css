@@ -1,0 +1,29 @@
+@import './tokens.css';
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    max-inline-size: var(--measure);
+    font-family: var(--font-family, system-ui, sans-serif);
+}
+
+html,
+body,
+div,
+header,
+nav,
+main,
+footer,
+[data-role="layout"] {
+    max-inline-size: none;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+body {
+    margin: 0;
+}
