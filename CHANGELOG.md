@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [v0.2.1] - 2026-05-01
+## [0.2.1] - 2026-05-01
 
 ### Changed
 
@@ -36,26 +36,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   longer used by the publish workflow. The secret can now be deleted from
   the repository settings.
 
-## [v0.2.0] - 2026-05-01
-
-### Added
-
-- `CHANGELOG.md` following the Keep a Changelog convention.
-- Per-component and consolidated `.d.ts` type definitions that augment
-  `HTMLElementTagNameMap`, so `document.createElement` /
-  `document.querySelector` return the correct component class.
-- Publish workflow now creates a GitHub Release for each `v*` tag, using the
-  matching section of `CHANGELOG.md` as the release notes.
-- README: light-DOM architecture section, `<cover-pk>` API note
-  (`data-pk-centered` is canonical, `slot="centered"` accepted), TypeScript
-  usage, and a Storybook link.
-
-### Fixed
-
-- README package name (`@rgoussu-dev/planks` → `@rgoussu.dev/planks`) and the
-  outdated "shadow DOM" / `LayoutShadowElementPk` references left over from
-  the 0.2.0 light-DOM refactor.
-
 ## [0.2.0] - 2026-05-01
 
 ### Changed
@@ -66,6 +46,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   CSS to cascade naturally.
 - Hardened CI/publish workflows: actions pinned to SHAs, Node 24, pnpm setup
   via `pnpm/action-setup`.
+
+### Added
+
+- `CHANGELOG.md` following the Keep a Changelog convention.
+- Per-component and consolidated `.d.ts` type definitions that augment
+  `HTMLElementTagNameMap`, so `document.createElement` /
+  `document.querySelector` return the correct component class.
+- Publish workflow creates a GitHub Release for each pushed tag, using the
+  matching section of `CHANGELOG.md` as the release notes.
+- README: light-DOM architecture section, `<cover-pk>` API note
+  (`data-pk-centered` is canonical, `slot="centered"` accepted), TypeScript
+  usage, and a Storybook link.
+
+### Fixed
+
+- README package name (`@rgoussu-dev/planks` → `@rgoussu.dev/planks`) and the
+  outdated "shadow DOM" / `LayoutShadowElementPk` references left over from
+  the 0.2.0 light-DOM refactor.
 
 ## [0.1.0] - 2026-05-01
 
@@ -83,6 +81,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Missing global styles when consuming the package without the resets entry.
 
-[Unreleased]: https://github.com/rgoussu-dev/planks/compare/v0.2.1...HEAD
-[v0.2.1]: https://github.com/rgoussu-dev/planks/compare/v0.2.0...v0.2.1
-[v0.2.0]: https://github.com/rgoussu-dev/planks/releases/tag/v0.2.0
+[Unreleased]: https://github.com/rgoussu-dev/planks/compare/0.2.1...HEAD
+[0.2.1]: https://github.com/rgoussu-dev/planks/compare/0.2.0...0.2.1
+[0.2.0]: https://github.com/rgoussu-dev/planks/releases/tag/0.2.0
