@@ -1,8 +1,16 @@
 {
   "name": "@rgoussu.dev/planks",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Fundamental layout web components",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rgoussu-dev/planks.git"
+  },
+  "homepage": "https://rgoussu-dev.github.io/planks/",
+  "bugs": {
+    "url": "https://github.com/rgoussu-dev/planks/issues"
+  },
   "main": "./dist/planks.umd.cjs",
   "module": "./dist/planks.js",
   "types": "./dist/index.d.ts",

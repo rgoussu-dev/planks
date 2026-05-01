@@ -134,7 +134,165 @@ A consolidated declaration file is published as `dist/planks.d.ts` for tooling t
 
 ## Design tokens
 
-`tokens.css` exposes a modular scale (`--s-10` … `--s10`, ratio 1.5, base `1rem`), a `--measure` (60ch), and base font/color tokens. Components consume them as defaults but every value is overridable via attributes.
+`tokens.css` declares globals on `:root`. Every component falls back to these when its own variables aren't set, so changing them once cascades everywhere.
+
+| Token | Default | Purpose |
+|---|---|---|
+| `--ratio` | `1.5` | Modular scale ratio. |
+| `--s-10` … `--s10` | `1rem * ratio^n` | Modular spacing/sizing scale. `--s0` is `1rem`. |
+| `--measure` | `60ch` | Comfortable line length, used by `<center-pk>` and `<switcher-pk>`. |
+| `--font-family` | `system-ui, sans-serif` | Default UI font. |
+| `--font-size-base` | `1rem` | Default body font size. |
+| `--font-size-big` | `1.75rem` | Large display size. |
+| `--font-size-biggish` | `2.25rem` | Largest display size. |
+| `--border-thin` | `1px` | Hairline border width. |
+| `--color-light` | `#fff` | Light surface color. |
+| `--color-dark` | `#000` | Dark text/border color. |
+
+## CSS custom properties (per component)
+
+Every component reads its state from `--<component>-*` custom properties. The element's attributes simply set these on the element's own `style`, so you can override them just as effectively from a stylesheet, an inline `style="…"`, or in a parent rule.
+
+Generic shape:
+
+```css
+/* via the element's own style attribute */
+<box-pk style="--box-padding: 2rem; --box-bg-color: #f4f4f4">…</box-pk>
+
+/* or from a consumer stylesheet */
+.card-grid > box-pk {
+  --box-padding: 2rem;
+  --box-bg-color: #f4f4f4;
+}
+```
+
+### `<box-pk>`
+
+| Variable | Default | Maps to attribute |
+|---|---|---|
+| `--box-padding` | `var(--s1)` | `padding` |
+| `--box-border-width` | `0` | `borderWidth` (`"none"` → `0`) |
+| `--box-border-color` | `transparent` | `borderColor` |
+| `--box-border-radius` | `0` | `borderRadius` |
+| `--box-color` | `inherit` | `color` |
+| `--box-bg-color` | `transparent` | `backgroundColor` |
+| `--box-shadow` | `none` | `shadow` |
+
+### `<center-pk>`
+
+| Variable | Default | Maps to attribute |
+|---|---|---|
+| `--center-max-width` | `var(--measure)` | `maxWidth` |
+| `--center-gutter` | `0` | `gutters` |
+
+`<center-pk>` also reads the boolean attributes `intrinsic` (center via `align-items`, not `margin: auto`) and `alignText` (sets `text-align: center`).
+
+### `<cluster-pk>`
+
+| Variable | Default | Maps to attribute |
+|---|---|---|
+| `--cluster-gap` | `var(--s1)` | `space` |
+| `--cluster-justify` | `flex-start` | `justify` |
+| `--cluster-align` | `flex-start` | `align` |
+
+### `<container-pk>`
+
+`<container-pk>` is the only component without instance-level custom properties — it's a structural anchor for `name`-scoped container queries. Override its layout with regular tag-scoped CSS:
+
+```css
+container-pk[name="card"] { container-type: inline-size; container-name: card; }
+```
+
+### `<cover-pk>`
+
+| Variable | Default | Maps to attribute |
+|---|---|---|
+| `--cover-min-height` | `100vh` | `minHeight` |
+| `--cover-space` | `var(--s0)` | `space` (also drives padding) |
+| `--cover-padding` | `var(--s1)` | `space` (zeroed by `noPad`) |
+
+### `<frame-pk>`
+
+| Variable | Default | Maps to attribute |
+|---|---|---|
+| `--frame-n` | `16` | `ratio` (numerator of `n:d`) |
+| `--frame-d` | `9` | `ratio` (denominator of `n:d`) |
+
+### `<grid-pk>`
+
+| Variable | Default | Maps to attribute |
+|---|---|---|
+| `--grid-space` | `var(--s1)` | `space` |
+| `--grid-min` | `250px` | `min` (auto-fit minimum column width) |
+| `--grid-align` | `stretch` | `align` |
+| `--grid-justify` | `stretch` | `justify` |
+
+### `<icon-pk>`
+
+| Variable | Default | Maps to attribute |
+|---|---|---|
+| `--icon-space` | `0` | `space` (margin-inline-end when paired with text) |
+
+### `<imposter-pk>`
+
+| Variable | Default | Maps to attribute |
+|---|---|---|
+| `--imposter-position` | `absolute` | `fixed` (boolean → switches to `fixed`) |
+| `--imposter-margin` | `0` | `margin` (subtracted from max width/height) |
+
+The `breakout` boolean attribute disables the max-size clamp.
+
+### `<reel-pk>`
+
+| Variable | Default | Maps to attribute |
+|---|---|---|
+| `--reel-height` | `auto` | `height` |
+| `--reel-item-width` | `auto` | `itemWidth` |
+| `--reel-space` | `var(--s0)` | `space` (gap between items) |
+
+### `<sidebar-pk>`
+
+| Variable | Default | Maps to attribute |
+|---|---|---|
+| `--sidebar-space` | `var(--s2)` | `space` (gap between sidebar and content) |
+| `--sidebar-side-basis` | `0` | `sideWidth` (intrinsic sidebar size) |
+| `--sidebar-content-min` | `50%` | `contentWidth` (content's minimum) |
+
+The `side` attribute (`"left"` | `"right"`) chooses which child is the sidebar; `noStretch` removes the equal-height behavior.
+
+### `<stack-pk>`
+
+| Variable | Default | Maps to attribute |
+|---|---|---|
+| `--stack-space` | `var(--s1)` | `space` |
+
+`recursive` applies the stack rule to all descendants; `splitAfter="N"` pushes the Nth child to the bottom.
+
+### `<switcher-pk>`
+
+| Variable | Default | Maps to attribute |
+|---|---|---|
+| `--switcher-space` | `var(--s1)` | `space` |
+| `--switcher-threshold` | `var(--measure)` | `threshold` (container-width breakpoint) |
+
+The `limit` attribute caps how many children stay on a row before stacking.
+
+### `<typography-pk>`
+
+| Variable | Default | Maps to attribute |
+|---|---|---|
+| `--typo-font-family` | `inherit` | `fontFamily` |
+| `--typo-font-size` | `inherit` | `fontSize` |
+| `--typo-font-weight` | `normal` | `fontWeight` |
+| `--typo-font-style` | `normal` | `fontStyle` |
+| `--typo-line-height` | `inherit` | `lineHeight` |
+| `--typo-letter-spacing` | `normal` | `letterSpacing` |
+| `--typo-text-align` | `inherit` | `textAlign` |
+| `--typo-text-transform` | `none` | `textTransform` |
+| `--typo-text-decoration` | `none` | `textDecoration` |
+| `--typo-color` | `inherit` | `color` |
+
+The `variant` attribute (`"heading-1"`, `"heading-2"`, `"heading-3"`, `"body"`, `"caption"`, `"small"`) preconfigures these properties via tag-scoped rules; you can still override any of them.
 
 ## Development
 
