@@ -1,14 +1,10 @@
-import { LayoutShadowElementPk } from '../element/shadow-element';
+import LayoutElementPk from '../element/layout-element';
 
-export default class Icon extends LayoutShadowElementPk {
-    constructor() {
-        super('icon-pk');
-    }
-
-    styles(): string {
+export default class Icon extends LayoutElementPk {
+    protected structuralCss(): string {
         return `
-            :host { display: inline-flex; align-items: baseline; }
-            ::slotted(svg) {
+            icon-pk { display: inline-flex; align-items: baseline; }
+            icon-pk > svg {
                 width: 0.75em;
                 width: 1cap;
                 height: 0.75em;
@@ -18,22 +14,8 @@ export default class Icon extends LayoutShadowElementPk {
         `;
     }
 
-    render(): void {
-        this.shadow.innerHTML = `<slot></slot>`;
-        this.updateStyles();
-        this.updateAccessibility();
-    }
-
-    protected override update(): void {
-        this.updateStyles();
-        this.updateAccessibility();
-    }
-
-    private updateStyles(): void {
+    protected override applyInstanceStyles(): void {
         this.style.setProperty('--icon-space', this.space || '0');
-    }
-
-    private updateAccessibility(): void {
         if (this.label) {
             this.setAttribute('role', 'img');
             this.setAttribute('aria-label', this.label);

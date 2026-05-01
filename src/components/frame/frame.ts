@@ -1,21 +1,17 @@
-import { LayoutShadowElementPk } from '../element/shadow-element';
+import LayoutElementPk from '../element/layout-element';
 
-export default class Frame extends LayoutShadowElementPk {
-    constructor() {
-        super('frame-pk');
-    }
-
-    styles(): string {
+export default class Frame extends LayoutElementPk {
+    protected structuralCss(): string {
         return `
-            :host {
+            frame-pk {
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 overflow: hidden;
                 aspect-ratio: var(--frame-n) / var(--frame-d);
             }
-            ::slotted(img),
-            ::slotted(video) {
+            frame-pk > img,
+            frame-pk > video {
                 inline-size: 100%;
                 block-size: 100%;
                 object-fit: cover;
@@ -23,14 +19,7 @@ export default class Frame extends LayoutShadowElementPk {
         `;
     }
 
-    render(): void {
-        this.shadow.innerHTML = `<slot></slot>`;
-        this.updateStyles();
-    }
-
-    protected override update(): void { this.updateStyles(); }
-
-    private updateStyles(): void {
+    protected override applyInstanceStyles(): void {
         const [n, d] = this.parseRatio(this.ratio);
         this.style.setProperty('--frame-n', n.toString());
         this.style.setProperty('--frame-d', d.toString());

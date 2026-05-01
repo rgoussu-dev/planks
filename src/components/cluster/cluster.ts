@@ -1,14 +1,9 @@
-import { LayoutShadowElementPk } from '../element/shadow-element';
+import LayoutElementPk from '../element/layout-element';
 
-export default class Cluster extends LayoutShadowElementPk {
-    constructor() {
-        super('cluster-pk');
-    }
-
-    styles(): string {
+export default class Cluster extends LayoutElementPk {
+    protected structuralCss(): string {
         return `
-            :host { display: block; }
-            .cluster {
+            cluster-pk {
                 display: flex;
                 flex-wrap: wrap;
                 gap: var(--cluster-gap, var(--s1));
@@ -18,14 +13,7 @@ export default class Cluster extends LayoutShadowElementPk {
         `;
     }
 
-    render(): void {
-        this.shadow.innerHTML = `<div class="cluster" part="cluster"><slot></slot></div>`;
-        this.updateStyles();
-    }
-
-    protected override update(): void { this.updateStyles(); }
-
-    private updateStyles(): void {
+    protected override applyInstanceStyles(): void {
         this.style.setProperty('--cluster-gap', this.space);
         this.style.setProperty('--cluster-justify', this.justify);
         this.style.setProperty('--cluster-align', this.align);

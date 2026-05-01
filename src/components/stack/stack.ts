@@ -1,45 +1,25 @@
-import { LayoutShadowElementPk } from '../element/shadow-element';
+import LayoutElementPk from '../element/layout-element';
 
-export default class Stack extends LayoutShadowElementPk {
-    constructor() {
-        super('stack-pk');
-    }
-
-    styles(): string {
+export default class Stack extends LayoutElementPk {
+    protected structuralCss(): string {
         return `
-            :host { display: block; }
-            :host([splitAfter]:only-child) { block-size: 100%; }
-            ::slotted(* + *) { margin-block-start: var(--stack-space, var(--s1)); }
-            :host([recursive]) ::slotted(* *) { margin-block-start: var(--stack-space, var(--s1)); }
+            stack-pk { display: block; }
+            stack-pk > * + * { margin-block-start: var(--stack-space, var(--s1)); }
+            stack-pk[recursive] * + * { margin-block-start: var(--stack-space, var(--s1)); }
+            stack-pk[splitAfter]:only-child { block-size: 100%; }
         `;
     }
 
-    render(): void {
-        this.shadow.innerHTML = `<slot></slot>`;
-        this.updateStyles();
-        this.updateSplitAfter();
-    }
-
-    protected override update(): void {
-        this.updateStyles();
-        this.updateSplitAfter();
-    }
-
-    private updateStyles(): void {
+    protected override applyInstanceStyles(): void {
         this.style.setProperty('--stack-space', this.space);
-    }
-
-    private updateSplitAfter(): void {
         if (this.splitAfter) {
-            const styleId = `stack-split-${this.splitAfter}`;
-            if (!this.shadow.querySelector(`#${styleId}`)) {
-                const style = document.createElement('style');
-                style.id = styleId;
-                style.textContent = `::slotted(*:nth-child(${this.splitAfter})) { margin-block-end: auto !important; }`;
-                this.shadow.appendChild(style);
-            }
+            this.dataset.pkSplit = this.splitAfter;
+            const n = this.splitAfter;
+            LayoutElementPk.ensureDynamicStyle(`stack-split-${n}`, () =>
+                `stack-pk[data-pk-split="${n}"] > :nth-child(${n}) { margin-block-end: auto; }`
+            );
         } else {
-            this.shadow.querySelectorAll('[id^="stack-split-"]').forEach(s => s.remove());
+            delete this.dataset.pkSplit;
         }
     }
 

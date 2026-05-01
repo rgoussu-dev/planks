@@ -1,13 +1,9 @@
-import ShadowElementPk from '../element/shadow-element';
+import LayoutElementPk from '../element/layout-element';
 
-export default class Typography extends ShadowElementPk {
-    constructor() {
-        super('typography-pk');
-    }
-
-    styles(): string {
+export default class Typography extends LayoutElementPk {
+    protected structuralCss(): string {
         return `
-            :host {
+            typography-pk {
                 display: block;
                 font-family: var(--typo-font-family, inherit);
                 font-size: var(--typo-font-size, inherit);
@@ -20,39 +16,57 @@ export default class Typography extends ShadowElementPk {
                 text-decoration: var(--typo-text-decoration, none);
                 color: var(--typo-color, inherit);
             }
+            typography-pk[variant="heading-1"] {
+                --typo-font-size: var(--s4);
+                --typo-font-weight: bold;
+                --typo-line-height: 1.1;
+                --typo-letter-spacing: -0.025em;
+            }
+            typography-pk[variant="heading-2"] {
+                --typo-font-size: var(--s3);
+                --typo-font-weight: bold;
+                --typo-line-height: 1.2;
+                --typo-letter-spacing: -0.02em;
+            }
+            typography-pk[variant="heading-3"] {
+                --typo-font-size: var(--s2);
+                --typo-font-weight: 600;
+                --typo-line-height: 1.3;
+                --typo-letter-spacing: -0.01em;
+            }
+            typography-pk[variant="body"] {
+                --typo-font-size: var(--s0);
+                --typo-line-height: 1.6;
+            }
+            typography-pk[variant="caption"] {
+                --typo-font-size: var(--s-1);
+                --typo-line-height: 1.4;
+                --typo-letter-spacing: 0.01em;
+            }
+            typography-pk[variant="small"] {
+                --typo-font-size: var(--s-2);
+                --typo-line-height: 1.3;
+                --typo-letter-spacing: 0.02em;
+            }
         `;
     }
 
-    render(): void {
-        this.shadow.innerHTML = `<slot></slot>`;
-        this.updateStyles();
-    }
-
-    protected override update(): void { this.updateStyles(); }
-
-    private updateStyles(): void {
-        const v = this.getVariantStyles();
-        this.style.setProperty('--typo-font-family', this.fontFamily || v.fontFamily || 'inherit');
-        this.style.setProperty('--typo-font-size', this.fontSize || v.fontSize || 'inherit');
-        this.style.setProperty('--typo-font-weight', this.fontWeight || v.fontWeight || 'normal');
-        this.style.setProperty('--typo-font-style', this.fontStyle || 'normal');
-        this.style.setProperty('--typo-line-height', this.lineHeight || v.lineHeight || 'inherit');
-        this.style.setProperty('--typo-letter-spacing', this.letterSpacing || v.letterSpacing || 'normal');
-        this.style.setProperty('--typo-text-align', this.textAlign || 'inherit');
-        this.style.setProperty('--typo-text-transform', this.textTransform || 'none');
-        this.style.setProperty('--typo-text-decoration', this.textDecoration || 'none');
-        this.style.setProperty('--typo-color', this.color || 'inherit');
-    }
-
-    private getVariantStyles(): Record<string, string> {
-        switch (this.variant) {
-            case 'heading-1': return { fontSize: 'var(--s4)', fontWeight: 'bold', lineHeight: '1.1', letterSpacing: '-0.025em', fontFamily: 'inherit' };
-            case 'heading-2': return { fontSize: 'var(--s3)', fontWeight: 'bold', lineHeight: '1.2', letterSpacing: '-0.02em', fontFamily: 'inherit' };
-            case 'heading-3': return { fontSize: 'var(--s2)', fontWeight: '600', lineHeight: '1.3', letterSpacing: '-0.01em', fontFamily: 'inherit' };
-            case 'body': return { fontSize: 'var(--s0)', fontWeight: 'normal', lineHeight: '1.6', letterSpacing: 'normal', fontFamily: 'inherit' };
-            case 'caption': return { fontSize: 'var(--s-1)', fontWeight: 'normal', lineHeight: '1.4', letterSpacing: '0.01em', fontFamily: 'inherit' };
-            case 'small': return { fontSize: 'var(--s-2)', fontWeight: 'normal', lineHeight: '1.3', letterSpacing: '0.02em', fontFamily: 'inherit' };
-            default: return {};
+    protected override applyInstanceStyles(): void {
+        const map: [string, string][] = [
+            ['--typo-font-family', this.fontFamily],
+            ['--typo-font-size', this.fontSize],
+            ['--typo-font-weight', this.fontWeight],
+            ['--typo-font-style', this.fontStyle],
+            ['--typo-line-height', this.lineHeight],
+            ['--typo-letter-spacing', this.letterSpacing],
+            ['--typo-text-align', this.textAlign],
+            ['--typo-text-transform', this.textTransform],
+            ['--typo-text-decoration', this.textDecoration],
+            ['--typo-color', this.color],
+        ];
+        for (const [prop, value] of map) {
+            if (value) this.style.setProperty(prop, value);
+            else this.style.removeProperty(prop);
         }
     }
 

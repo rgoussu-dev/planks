@@ -1,30 +1,18 @@
-import { LayoutShadowElementPk } from '../element/shadow-element';
+import LayoutElementPk from '../element/layout-element';
 
-export default class Container extends LayoutShadowElementPk {
-    constructor() {
-        super('container-pk');
-    }
-
-    styles(): string {
+export default class Container extends LayoutElementPk {
+    protected structuralCss(): string {
         return `
-            :host {
+            container-pk {
                 display: block;
                 container-type: inline-size;
-                container-name: var(--container-name, none);
             }
-            .wrapper { display: contents; }
         `;
     }
 
-    render(): void {
-        this.shadow.innerHTML = `<div class="wrapper" part="wrapper"><slot></slot></div>`;
-        this.updateStyles();
-    }
-
-    protected override update(): void { this.updateStyles(); }
-
-    private updateStyles(): void {
-        this.style.setProperty('--container-name', this.name || 'none');
+    protected override applyInstanceStyles(): void {
+        if (this.name) this.style.setProperty('container-name', this.name);
+        else this.style.removeProperty('container-name');
     }
 
     get name() { return this.getAttribute('name'); }

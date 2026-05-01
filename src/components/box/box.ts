@@ -1,17 +1,11 @@
-import { LayoutShadowElementPk } from '../element/shadow-element';
+import LayoutElementPk from '../element/layout-element';
 
-export default class Box extends LayoutShadowElementPk {
-    constructor() {
-        super('box-pk');
-    }
-
-    styles(): string {
+export default class Box extends LayoutElementPk {
+    protected structuralCss(): string {
         return `
-            :host {
+            box-pk {
                 display: inline-block;
                 box-sizing: border-box;
-            }
-            .box {
                 padding: var(--box-padding, var(--s1));
                 border-style: solid;
                 border-width: var(--box-border-width, 0);
@@ -24,16 +18,7 @@ export default class Box extends LayoutShadowElementPk {
         `;
     }
 
-    render(): void {
-        this.shadow.innerHTML = `<div class="box" part="box"><slot></slot></div>`;
-        this.updateStyles();
-    }
-
-    protected override update(): void {
-        this.updateStyles();
-    }
-
-    private updateStyles(): void {
+    protected override applyInstanceStyles(): void {
         this.style.setProperty('--box-padding', this.padding);
         this.style.setProperty('--box-border-width', this.borderWidth === 'none' ? '0' : this.borderWidth);
         this.style.setProperty('--box-border-color', this.borderColor);

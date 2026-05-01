@@ -1,43 +1,27 @@
-import { LayoutShadowElementPk } from '../element/shadow-element';
+import LayoutElementPk from '../element/layout-element';
 
-export default class Cover extends LayoutShadowElementPk {
-    constructor() {
-        super('cover-pk');
-    }
-
-    styles(): string {
+export default class Cover extends LayoutElementPk {
+    protected structuralCss(): string {
         return `
-            :host {
+            cover-pk {
                 display: flex;
                 flex-direction: column;
                 min-block-size: var(--cover-min-height, 100vh);
                 padding: var(--cover-padding, var(--s1));
             }
-            :host([noPad]) { padding: 0; }
-            ::slotted(*) { margin-block: var(--cover-space, var(--s0)); }
-            ::slotted(:first-child:not([slot="centered"])) { margin-block-start: 0; }
-            ::slotted(:last-child:not([slot="centered"])) { margin-block-end: 0; }
-            slot[name="centered"] { margin-block: auto; }
+            cover-pk[noPad] { padding: 0; }
+            cover-pk > * { margin-block: var(--cover-space, var(--s0)); }
+            cover-pk > [data-pk-centered],
+            cover-pk > [slot="centered"] { margin-block: auto; }
+            cover-pk > :first-child:not([data-pk-centered]):not([slot="centered"]) { margin-block-start: 0; }
+            cover-pk > :last-child:not([data-pk-centered]):not([slot="centered"]) { margin-block-end: 0; }
         `;
     }
 
-    render(): void {
-        const centered = this.centered || 'centered';
-        this.shadow.innerHTML = `<slot></slot><slot name="${centered}"></slot>`;
-        this.updateStyles();
-    }
-
-    protected override update(): void { this.updateStyles(); }
-
-    private updateStyles(): void {
+    protected override applyInstanceStyles(): void {
         this.style.setProperty('--cover-min-height', this.minHeight || '100vh');
         this.style.setProperty('--cover-space', this.space || 'var(--s0)');
         this.style.setProperty('--cover-padding', this.space || 'var(--s1)');
-    }
-
-    get centered() { return this.getAttribute('centered') || undefined; }
-    set centered(value: string | undefined) {
-        value === undefined ? this.removeAttribute('centered') : this.setAttribute('centered', value);
     }
 
     get space() { return this.getAttribute('space') || undefined; }
@@ -53,7 +37,7 @@ export default class Cover extends LayoutShadowElementPk {
     get noPad() { return this.hasAttribute('noPad'); }
     set noPad(value: boolean) { value ? this.setAttribute('noPad', '') : this.removeAttribute('noPad'); }
 
-    static get observedAttributes() { return ['centered', 'space', 'minHeight', 'noPad']; }
+    static get observedAttributes() { return ['space', 'minHeight', 'noPad']; }
 }
 
 if ('customElements' in window && !customElements.get('cover-pk')) {

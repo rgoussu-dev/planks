@@ -1,19 +1,15 @@
-import { LayoutShadowElementPk } from '../element/shadow-element';
+import LayoutElementPk from '../element/layout-element';
 
-export default class Imposter extends LayoutShadowElementPk {
-    constructor() {
-        super('imposter-pk');
-    }
-
-    styles(): string {
+export default class Imposter extends LayoutElementPk {
+    protected structuralCss(): string {
         return `
-            :host {
+            imposter-pk {
                 position: var(--imposter-position, absolute);
                 inset-block-start: 50%;
                 inset-inline-start: 50%;
                 transform: translate(-50%, -50%);
             }
-            :host(:not([breakout])) {
+            imposter-pk:not([breakout]) {
                 overflow: auto;
                 max-inline-size: calc(100% - (var(--imposter-margin, 0) * 2));
                 max-block-size: calc(100% - (var(--imposter-margin, 0) * 2));
@@ -21,14 +17,7 @@ export default class Imposter extends LayoutShadowElementPk {
         `;
     }
 
-    render(): void {
-        this.shadow.innerHTML = `<slot></slot>`;
-        this.updateStyles();
-    }
-
-    protected override update(): void { this.updateStyles(); }
-
-    private updateStyles(): void {
+    protected override applyInstanceStyles(): void {
         this.style.setProperty('--imposter-position', this.fixed ? 'fixed' : 'absolute');
         this.style.setProperty('--imposter-margin', this.margin);
     }

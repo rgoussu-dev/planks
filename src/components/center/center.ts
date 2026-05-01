@@ -1,13 +1,9 @@
-import { LayoutShadowElementPk } from '../element/shadow-element';
+import LayoutElementPk from '../element/layout-element';
 
-export default class Center extends LayoutShadowElementPk {
-    constructor() {
-        super('center-pk');
-    }
-
-    styles(): string {
+export default class Center extends LayoutElementPk {
+    protected structuralCss(): string {
         return `
-            :host {
+            center-pk {
                 display: block;
                 box-sizing: content-box;
                 margin-inline-start: auto;
@@ -16,20 +12,16 @@ export default class Center extends LayoutShadowElementPk {
                 padding-inline-start: var(--center-gutter, 0);
                 padding-inline-end: var(--center-gutter, 0);
             }
-            :host([alignText]) { text-align: center; }
-            :host([intrinsic]) { display: flex; flex-direction: column; align-items: center; }
-            .wrapper { display: contents; }
+            center-pk[alignText] { text-align: center; }
+            center-pk[intrinsic] {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
         `;
     }
 
-    render(): void {
-        this.shadow.innerHTML = `<div class="wrapper" part="wrapper"><slot></slot></div>`;
-        this.updateStyles();
-    }
-
-    protected override update(): void { this.updateStyles(); }
-
-    private updateStyles(): void {
+    protected override applyInstanceStyles(): void {
         this.style.setProperty('--center-max-width', this.maxWidth);
         this.style.setProperty('--center-gutter', this.gutters || '0');
     }

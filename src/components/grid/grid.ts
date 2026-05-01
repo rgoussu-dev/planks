@@ -1,34 +1,23 @@
-import { LayoutShadowElementPk } from '../element/shadow-element';
+import LayoutElementPk from '../element/layout-element';
 
-export default class Grid extends LayoutShadowElementPk {
-    constructor() {
-        super('grid-pk');
-    }
-
-    styles(): string {
+export default class Grid extends LayoutElementPk {
+    protected structuralCss(): string {
         return `
-            :host {
+            grid-pk {
                 display: grid;
                 grid-gap: var(--grid-space, var(--s1));
                 align-items: var(--grid-align, stretch);
                 justify-content: var(--grid-justify, stretch);
             }
             @supports (width: min(var(--grid-min, 250px), 100%)) {
-                :host {
+                grid-pk {
                     grid-template-columns: repeat(auto-fit, minmax(min(var(--grid-min, 250px), 100%), 1fr));
                 }
             }
         `;
     }
 
-    render(): void {
-        this.shadow.innerHTML = `<slot></slot>`;
-        this.updateStyles();
-    }
-
-    protected override update(): void { this.updateStyles(); }
-
-    private updateStyles(): void {
+    protected override applyInstanceStyles(): void {
         this.style.setProperty('--grid-min', this.min);
         this.style.setProperty('--grid-space', this.space);
         this.style.setProperty('--grid-align', this.align || 'stretch');

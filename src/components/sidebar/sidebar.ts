@@ -1,57 +1,45 @@
-import { LayoutShadowElementPk } from '../element/shadow-element';
+import LayoutElementPk from '../element/layout-element';
 
-export default class Sidebar extends LayoutShadowElementPk {
-    constructor() {
-        super('sidebar-pk');
-    }
-
-    styles(): string {
+export default class Sidebar extends LayoutElementPk {
+    protected structuralCss(): string {
         return `
-            :host {
+            sidebar-pk {
                 display: flex;
                 flex-wrap: wrap;
-                gap: var(--sidebar-space, var(--s1));
-                align-items: var(--sidebar-align, stretch);
+                gap: var(--sidebar-space, var(--s2));
+                align-items: stretch;
             }
-            ::slotted(:first-child) {
-                flex-grow: var(--sidebar-first-grow, 1);
-                flex-basis: var(--sidebar-first-basis, 0);
-                min-inline-size: var(--sidebar-first-min, auto);
+            sidebar-pk[noStretch] { align-items: flex-start; }
+
+            sidebar-pk:not([side="right"]) > :first-child {
+                flex-grow: 1;
+                flex-basis: var(--sidebar-side-basis, 0);
+                min-inline-size: auto;
             }
-            ::slotted(:last-child) {
-                flex-grow: var(--sidebar-last-grow, 999);
-                flex-basis: var(--sidebar-last-basis, 0);
-                min-inline-size: var(--sidebar-last-min, 50%);
+            sidebar-pk:not([side="right"]) > :last-child {
+                flex-grow: 999;
+                flex-basis: 0;
+                min-inline-size: var(--sidebar-content-min, 50%);
+            }
+
+            sidebar-pk[side="right"] > :first-child {
+                flex-grow: 999;
+                flex-basis: 0;
+                min-inline-size: var(--sidebar-content-min, 50%);
+            }
+            sidebar-pk[side="right"] > :last-child {
+                flex-grow: 1;
+                flex-basis: var(--sidebar-side-basis, 0);
+                min-inline-size: auto;
             }
         `;
     }
 
-    render(): void {
-        this.shadow.innerHTML = `<slot></slot>`;
-        this.updateStyles();
-    }
-
-    protected override update(): void { this.updateStyles(); }
-
-    private updateStyles(): void {
+    protected override applyInstanceStyles(): void {
         this.style.setProperty('--sidebar-space', this.space);
-        this.style.setProperty('--sidebar-align', this.noStretch ? 'flex-start' : 'stretch');
-
-        if (this.side === 'left') {
-            this.style.setProperty('--sidebar-first-grow', '1');
-            this.style.setProperty('--sidebar-first-basis', this.sideWidth || '0');
-            this.style.setProperty('--sidebar-first-min', 'auto');
-            this.style.setProperty('--sidebar-last-grow', '999');
-            this.style.setProperty('--sidebar-last-basis', '0');
-            this.style.setProperty('--sidebar-last-min', this.contentWidth || '50%');
-        } else {
-            this.style.setProperty('--sidebar-first-grow', '999');
-            this.style.setProperty('--sidebar-first-basis', '0');
-            this.style.setProperty('--sidebar-first-min', this.contentWidth || '50%');
-            this.style.setProperty('--sidebar-last-grow', '1');
-            this.style.setProperty('--sidebar-last-basis', this.sideWidth || '0');
-            this.style.setProperty('--sidebar-last-min', 'auto');
-        }
+        this.style.setProperty('--sidebar-side-basis', this.sideWidth || '0');
+        if (this.contentWidth) this.style.setProperty('--sidebar-content-min', this.contentWidth);
+        else this.style.removeProperty('--sidebar-content-min');
     }
 
     get side() { return (this.getAttribute('side') as 'left' | 'right') || 'left'; }
