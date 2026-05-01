@@ -49,3 +49,9 @@ export default class Switcher extends LayoutElementPk {
 if ('customElements' in window && !customElements.get('switcher-pk')) {
     customElements.define('switcher-pk', Switcher);
 }
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'switcher-pk': Switcher;
+    }
+}

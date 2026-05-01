@@ -43,3 +43,9 @@ export default class Cover extends LayoutElementPk {
 if ('customElements' in window && !customElements.get('cover-pk')) {
     customElements.define('cover-pk', Cover);
 }
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'cover-pk': Cover;
+    }
+}

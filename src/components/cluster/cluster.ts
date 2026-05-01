@@ -34,3 +34,9 @@ export default class Cluster extends LayoutElementPk {
 if ('customElements' in window && !customElements.get('cluster-pk')) {
     customElements.define('cluster-pk', Cluster);
 }
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'cluster-pk': Cluster;
+    }
+}

@@ -38,3 +38,9 @@ export default class Stack extends LayoutElementPk {
 if ('customElements' in window && !customElements.get('stack-pk')) {
     customElements.define('stack-pk', Stack);
 }
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'stack-pk': Stack;
+    }
+}

@@ -24,3 +24,9 @@ export default class Container extends LayoutElementPk {
 if ('customElements' in window && !customElements.get('container-pk')) {
     customElements.define('container-pk', Container);
 }
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'container-pk': Container;
+    }
+}

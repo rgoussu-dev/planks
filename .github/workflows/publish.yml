@@ -5,6 +5,9 @@ on:
     tags:
       - 'v*'
 
+permissions:
+  contents: write
+
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -28,3 +31,27 @@ jobs:
       - run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Extract release notes from CHANGELOG
+        id: notes
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          awk -v ver="$version" '
+            /^## \[/ {
+              if (found) exit
+              if ($0 ~ "^## \\[" ver "\\]") { found = 1; next }
+            }
+            found { print }
+          ' CHANGELOG.md > release-notes.md
+          if [ ! -s release-notes.md ]; then
+            echo "No CHANGELOG section found for $version" >&2
+            exit 1
+          fi
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            --title "$GITHUB_REF_NAME" \
+            --notes-file release-notes.md

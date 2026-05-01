@@ -44,3 +44,9 @@ export default class Center extends LayoutElementPk {
 if ('customElements' in window && !customElements.get('center-pk')) {
     customElements.define('center-pk', Center);
 }
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'center-pk': Center;
+    }
+}

@@ -78,3 +78,9 @@ export default class Reel extends LayoutElementPk {
 if ('customElements' in window && !customElements.get('reel-pk')) {
     customElements.define('reel-pk', Reel);
 }
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'reel-pk': Reel;
+    }
+}

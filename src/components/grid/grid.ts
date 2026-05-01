@@ -42,3 +42,9 @@ export default class Grid extends LayoutElementPk {
 if ('customElements' in window && !customElements.get('grid-pk')) {
     customElements.define('grid-pk', Grid);
 }
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'grid-pk': Grid;
+    }
+}

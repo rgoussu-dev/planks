@@ -101,3 +101,9 @@ export default class Typography extends LayoutElementPk {
 if ('customElements' in window && !customElements.get('typography-pk')) {
     customElements.define('typography-pk', Typography);
 }
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'typography-pk': Typography;
+    }
+}

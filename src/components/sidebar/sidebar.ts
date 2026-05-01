@@ -63,3 +63,9 @@ export default class Sidebar extends LayoutElementPk {
 if ('customElements' in window && !customElements.get('sidebar-pk')) {
     customElements.define('sidebar-pk', Sidebar);
 }
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'sidebar-pk': Sidebar;
+    }
+}

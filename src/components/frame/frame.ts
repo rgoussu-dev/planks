@@ -44,3 +44,9 @@ export default class Frame extends LayoutElementPk {
 if ('customElements' in window && !customElements.get('frame-pk')) {
     customElements.define('frame-pk', Frame);
 }
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'frame-pk': Frame;
+    }
+}

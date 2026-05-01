@@ -37,3 +37,9 @@ export default class Icon extends LayoutElementPk {
 if ('customElements' in window && !customElements.get('icon-pk')) {
     customElements.define('icon-pk', Icon);
 }
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'icon-pk': Icon;
+    }
+}

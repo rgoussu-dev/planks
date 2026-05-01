@@ -57,3 +57,9 @@ export default class Box extends LayoutElementPk {
 if ('customElements' in window && !customElements.get('box-pk')) {
     customElements.define('box-pk', Box);
 }
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'box-pk': Box;
+    }
+}

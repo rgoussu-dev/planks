@@ -37,3 +37,9 @@ export default class Imposter extends LayoutElementPk {
 if ('customElements' in window && !customElements.get('imposter-pk')) {
     customElements.define('imposter-pk', Imposter);
 }
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'imposter-pk': Imposter;
+    }
+}
