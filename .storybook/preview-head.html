@@ -1,12 +1,138 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+<link
+  href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,300..700,0..100,0..1&family=Lora:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+  rel="stylesheet"
+/>
 <style>
   :root {
-    --font-family: 'Lora', Georgia, serif;
+    --pk-paper: #fbf8f3;
+    --pk-cream: #f5efe6;
+    --pk-wash: #ede4d3;
+    --pk-ink: #1a1816;
+    --pk-graphite: #6b655c;
+    --pk-vermillion: #c8362d;
+    --pk-rule: rgba(26, 24, 22, 0.14);
+    --pk-rule-soft: rgba(26, 24, 22, 0.08);
+
+    /* Override planks tokens to match the editorial aesthetic. */
+    --font-family: 'Lora', Georgia, 'Times New Roman', serif;
+    --font-display: 'Fraunces', 'Lora', Georgia, serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
   }
+
+  html {
+    background: var(--pk-cream);
+  }
+
   body {
+    margin: 0;
+    padding: clamp(1.25rem, 2.5vw, 2rem);
     font-family: var(--font-family);
-    padding: 1rem;
+    color: var(--pk-ink);
+    background:
+      /* Faint blueprint grid */
+      linear-gradient(to right, var(--pk-rule-soft) 1px, transparent 1px) 0 0 / 32px 32px,
+      linear-gradient(to bottom, var(--pk-rule-soft) 1px, transparent 1px) 0 0 / 32px 32px,
+      var(--pk-cream);
+  }
+
+  /* Plate-style figure used by stories. */
+  .pk-plate {
+    margin: 0;
+    background: var(--pk-paper);
+    border: 1px solid var(--pk-rule);
+    box-shadow:
+      0 1px 0 var(--pk-rule-soft),
+      0 18px 40px -28px rgba(26, 24, 22, 0.35);
+  }
+  .pk-plate__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.85rem 1.25rem;
+    border-bottom: 1px solid var(--pk-rule);
+    background: var(--pk-paper);
+  }
+  .pk-plate__head--accent {
+    border-bottom: 1px solid var(--pk-ink);
+    background: linear-gradient(to bottom, var(--pk-paper), var(--pk-paper) 70%, var(--pk-wash));
+  }
+  .pk-plate__no {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--pk-vermillion);
+  }
+  .pk-plate__title {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--pk-graphite);
+  }
+  .pk-plate__body {
+    padding: 1.5rem;
+    background: var(--pk-paper);
+  }
+  .pk-plate__body--bare {
+    padding: 0;
+  }
+  .pk-plate__foot {
+    padding: 0.6rem 1.25rem;
+    border-top: 1px dashed var(--pk-rule);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--pk-graphite);
+    background: var(--pk-paper);
+  }
+
+  /* Generic helpers used by demos. */
+  .pk-cell {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.875rem 1.125rem;
+    border: 1px solid var(--pk-rule);
+    color: var(--pk-ink);
+    background: var(--pk-cream);
+  }
+  .pk-cell--ink { background: var(--pk-ink); color: var(--pk-paper); border-color: var(--pk-ink); }
+  .pk-cell--vermillion { background: var(--pk-vermillion); color: var(--pk-paper); border-color: var(--pk-vermillion); }
+  .pk-cell--wash { background: var(--pk-wash); }
+  .pk-cell--paper { background: var(--pk-paper); }
+
+  .pk-prose {
+    font-family: 'Lora', Georgia, serif;
+    color: var(--pk-ink);
+    line-height: 1.6;
+  }
+  .pk-prose h1, .pk-prose h2, .pk-prose h3 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    margin: 0;
+  }
+  .pk-mono {
+    font-family: var(--font-mono);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-size: 0.72rem;
+    color: var(--pk-graphite);
+  }
+  .pk-rule {
+    border: 0;
+    border-top: 1px solid var(--pk-rule);
+    margin: 0;
+  }
+
+  /* Make the autodocs page consistent with the chrome. */
+  .docs-story, .sb-show-main, .sb-main-padded {
+    background: var(--pk-cream) !important;
   }
 </style>
