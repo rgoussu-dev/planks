@@ -52,5 +52,10 @@
     "css",
     "design-system"
   ],
+  "pnpm": {
+    "ignoredBuiltDependencies": [
+      "esbuild"
+    ]
+  },
   "license": "MIT"
 }
