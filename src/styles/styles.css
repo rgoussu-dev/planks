@@ -8,14 +8,18 @@
     font-family: var(--font-family, system-ui, sans-serif);
 }
 
-html,
+/* :where() keeps this exemption at zero specificity so it can never outweigh
+   a component's own tag-scoped structural rules (e.g. center-pk's
+   max-inline-size), while still overriding the universal measure clamp above
+   by source order. */
+:where(html,
 body,
 div,
 header,
 nav,
 main,
 footer,
-[data-role="layout"] {
+[data-role="layout"]) {
     max-inline-size: none;
 }
 
