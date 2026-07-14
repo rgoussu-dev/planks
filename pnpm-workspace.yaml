@@ -1,0 +1,5 @@
+# esbuild works without its postinstall (the platform binary ships as an
+# optional dependency), so its build script is explicitly disallowed rather
+# than left unreviewed — pnpm >=10.26/11 errors on unlisted build scripts.
+allowBuilds:
+  esbuild: false

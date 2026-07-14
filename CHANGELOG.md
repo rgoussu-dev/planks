@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- `styles.css`: the `max-inline-size: none` exemption list (`html`, `body`,
+  `div`, …, `[data-role="layout"]`) is now wrapped in `:where()` so it has
+  zero specificity. Previously the `[data-role="layout"]` attribute selector
+  (specificity 0-1-0) outweighed components' own tag-scoped structural rules
+  (0-0-1) — most visibly `center-pk`, whose
+  `max-inline-size: var(--center-max-width, var(--measure))` never applied
+  when `styles.css` was loaded, which also collapsed its auto margins and
+  disabled centering entirely. The exemption still overrides the universal
+  measure clamp above it via source order.
+
 ## [0.2.1] - 2026-05-01
 
 ### Changed
