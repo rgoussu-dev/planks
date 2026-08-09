@@ -5,10 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.3.0] - 2026-08-09
+## [0.3.1] - 2026-08-09
+
+Version 0.3.0 was prepared but never tagged or published; its changes ship
+here together with the release-workflow fix.
 
 ### Fixed
 
+- Publish workflow: a release created from the GitHub UI (which mints the tag
+  that triggers the workflow) no longer fails at the final step — the GitHub
+  Release is now created *or updated*, with its notes taken from the CHANGELOG
+  section for the version in both flows.
 - `tokens.css`: `--s-10` was computed from `--s9` instead of `--s-9`, so the
   smallest step of the modular scale resolved to the same value as `--s8`
   (~410px instead of ~0.27px at default ratio).
