@@ -1,6 +1,6 @@
 :root {
     --ratio: 1.5;
-    --s-10: calc(var(--s9) / var(--ratio));
+    --s-10: calc(var(--s-9) / var(--ratio));
     --s-9: calc(var(--s-8) / var(--ratio));
     --s-8: calc(var(--s-7) / var(--ratio));
     --s-7: calc(var(--s-6) / var(--ratio));

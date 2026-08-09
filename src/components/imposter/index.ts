@@ -1,2 +1,2 @@
-export { default } from './imposter';
+export { default, default as Imposter } from './imposter';
 export * from './imposter';

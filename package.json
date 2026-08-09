@@ -1,6 +1,6 @@
 {
   "name": "@rgoussu.dev/planks",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Fundamental layout web components",
   "type": "module",
   "repository": {
@@ -16,9 +16,9 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/planks.js",
-      "require": "./dist/planks.umd.cjs",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/planks.umd.cjs"
     },
     "./tokens": "./dist/tokens.css",
     "./styles": "./dist/styles.css",

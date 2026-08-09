@@ -3,6 +3,7 @@ import LayoutElementPk from '../element/layout-element';
 export default class Reel extends LayoutElementPk {
     private resizeObserver?: ResizeObserver;
     private mutationObserver?: MutationObserver;
+    private managedTabIndex = false;
 
     protected structuralCss(): string {
         return `
@@ -35,10 +36,24 @@ export default class Reel extends LayoutElementPk {
         this.style.setProperty('--reel-item-width', this.itemWidth);
         this.style.setProperty('--reel-space', this.space);
         this.style.setProperty('--reel-height', this.height);
+        // itemWidth/space changes can alter scrollWidth without resizing the
+        // element, so neither observer fires — recheck overflow here.
+        this.toggleOverflowClass();
     }
 
     private toggleOverflowClass = (): void => {
-        this.classList.toggle('overflowing', this.scrollWidth > this.clientWidth);
+        const overflowing = this.scrollWidth > this.clientWidth;
+        this.classList.toggle('overflowing', overflowing);
+        // A scrollable region must be keyboard-reachable to be scrollable without
+        // a pointer. Manage tabindex only while overflowing, and never fight an
+        // author-set tabindex.
+        if (overflowing && !this.hasAttribute('tabindex')) {
+            this.setAttribute('tabindex', '0');
+            this.managedTabIndex = true;
+        } else if (!overflowing && this.managedTabIndex) {
+            this.removeAttribute('tabindex');
+            this.managedTabIndex = false;
+        }
     };
 
     override connectedCallback(): void {

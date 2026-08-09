@@ -5,10 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.3.0] - 2026-08-09
 
 ### Fixed
 
+- `tokens.css`: `--s-10` was computed from `--s9` instead of `--s-9`, so the
+  smallest step of the modular scale resolved to the same value as `--s8`
+  (~410px instead of ~0.27px at default ratio).
+- The named class exports documented in the README (`import type { Box, Stack }
+  from '@rgoussu.dev/planks'`) now actually exist: each component's index
+  re-exports its class by name, since `export *` skips default exports and the
+  package root previously exposed only `LayoutElementPk`. A test guards the
+  full export surface.
+- `package.json` `exports`: the `types` condition now comes first, as
+  TypeScript requires under `moduleResolution: bundler`/`node16` — previously
+  some consumer configs would miss the declarations entirely.
+- `<reel-pk>` rechecks overflow when `itemWidth`/`space`/`height` change:
+  those alter `scrollWidth` without resizing the element, so neither the
+  ResizeObserver nor the MutationObserver fired and the `overflowing` class
+  went stale.
 - **Dynamic attribute updates now restyle in real browsers.** `observedAttributes`
   listed camelCase names (`borderWidth`, `minHeight`, `itemWidth`, …), but HTML
   stores attribute names lowercased and browsers match `observedAttributes` by
@@ -36,6 +51,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- While its content overflows, `<reel-pk>` makes itself keyboard-focusable
+  (`tabindex="0"`) so keyboard users can scroll the region; an author-set
+  `tabindex` is never overridden, and the managed one is removed when the
+  overflow goes away. The README recommends an `aria-label` for scrollable
+  reels.
+- `LICENSE` file (MIT) — the license was declared in `package.json` but the
+  text was missing from the repo and the published tarball.
 - `@rgoussu.dev/planks/structural` — a build-generated `structural.css`
   containing every component's structural stylesheet, exactly as the runtime
   would inject it. SSR and static consumers link it so layout applies before

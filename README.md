@@ -278,6 +278,8 @@ The `breakout` boolean attribute disables the max-size clamp.
 | `--reel-item-width` | `auto` | `itemWidth` |
 | `--reel-space` | `var(--s0)` | `space` (gap between items) |
 
+While its content overflows, a reel makes itself keyboard-focusable (`tabindex="0"`) so keyboard users can scroll it; set your own `tabindex` to opt out — the reel never overrides one you provide. Give scrollable reels an accessible name (e.g. `aria-label="Photo gallery"`) so screen-reader users know what the region contains.
+
 ### `<sidebar-pk>`
 
 | Variable | Default | Maps to attribute |

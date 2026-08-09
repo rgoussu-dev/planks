@@ -1,2 +1,2 @@
-export { default } from './cluster';
+export { default, default as Cluster } from './cluster';
 export * from './cluster';

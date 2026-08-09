@@ -1,2 +1,2 @@
-export { default } from './center';
+export { default, default as Center } from './center';
 export * from './center';
