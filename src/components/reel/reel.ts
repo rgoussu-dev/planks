@@ -72,10 +72,10 @@ export default class Reel extends LayoutElementPk {
     get noBar() { return this.hasAttribute('noBar'); }
     set noBar(value: boolean) { value ? this.setAttribute('noBar', '') : this.removeAttribute('noBar'); }
 
-    static get observedAttributes() { return ['itemWidth', 'space', 'height', 'noBar']; }
+    static get observedAttributes() { return ['itemwidth', 'space', 'height', 'nobar']; }
 }
 
-if ('customElements' in window && !customElements.get('reel-pk')) {
+if (typeof window !== 'undefined' && 'customElements' in window && !customElements.get('reel-pk')) {
     customElements.define('reel-pk', Reel);
 }
 

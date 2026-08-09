@@ -50,11 +50,11 @@ export default class Box extends LayoutElementPk {
     set boxShadow(val: string) { this.setAttribute('shadow', val); }
 
     static get observedAttributes() {
-        return ['padding', 'borderWidth', 'borderColor', 'borderRadius', 'color', 'backgroundColor', 'shadow'];
+        return ['padding', 'borderwidth', 'bordercolor', 'borderradius', 'color', 'backgroundcolor', 'shadow'];
     }
 }
 
-if ('customElements' in window && !customElements.get('box-pk')) {
+if (typeof window !== 'undefined' && 'customElements' in window && !customElements.get('box-pk')) {
     customElements.define('box-pk', Box);
 }
 

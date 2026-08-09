@@ -31,7 +31,7 @@ export default class Cluster extends LayoutElementPk {
     static get observedAttributes() { return ['space', 'justify', 'align']; }
 }
 
-if ('customElements' in window && !customElements.get('cluster-pk')) {
+if (typeof window !== 'undefined' && 'customElements' in window && !customElements.get('cluster-pk')) {
     customElements.define('cluster-pk', Cluster);
 }
 

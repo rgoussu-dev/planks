@@ -1,7 +1,12 @@
 const registeredStructural = new Set<string>();
 const registeredDynamic = new Set<string>();
 
-export default abstract class LayoutElementPk extends HTMLElement {
+// HTMLElement doesn't exist outside the browser; fall back to a plain class so the
+// package can be imported during SSR/prerender. Elements only register client-side.
+const BaseElement: typeof HTMLElement =
+    typeof HTMLElement !== 'undefined' ? HTMLElement : (class {} as unknown as typeof HTMLElement);
+
+export default abstract class LayoutElementPk extends BaseElement {
     protected abstract structuralCss(): string;
     protected applyInstanceStyles(): void {}
 

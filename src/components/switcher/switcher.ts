@@ -46,7 +46,7 @@ export default class Switcher extends LayoutElementPk {
     static get observedAttributes() { return ['threshold', 'space', 'limit']; }
 }
 
-if ('customElements' in window && !customElements.get('switcher-pk')) {
+if (typeof window !== 'undefined' && 'customElements' in window && !customElements.get('switcher-pk')) {
     customElements.define('switcher-pk', Switcher);
 }
 

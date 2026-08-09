@@ -32,10 +32,10 @@ export default class Stack extends LayoutElementPk {
     get splitAfter() { return this.getAttribute('splitAfter') || ''; }
     set splitAfter(value: string) { this.setAttribute('splitAfter', value); }
 
-    static get observedAttributes() { return ['space', 'recursive', 'splitAfter']; }
+    static get observedAttributes() { return ['space', 'recursive', 'splitafter']; }
 }
 
-if ('customElements' in window && !customElements.get('stack-pk')) {
+if (typeof window !== 'undefined' && 'customElements' in window && !customElements.get('stack-pk')) {
     customElements.define('stack-pk', Stack);
 }
 

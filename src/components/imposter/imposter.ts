@@ -34,7 +34,7 @@ export default class Imposter extends LayoutElementPk {
     static get observedAttributes() { return ['breakout', 'margin', 'fixed']; }
 }
 
-if ('customElements' in window && !customElements.get('imposter-pk')) {
+if (typeof window !== 'undefined' && 'customElements' in window && !customElements.get('imposter-pk')) {
     customElements.define('imposter-pk', Imposter);
 }
 

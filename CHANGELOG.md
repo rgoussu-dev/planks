@@ -9,6 +9,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Dynamic attribute updates now restyle in real browsers.** `observedAttributes`
+  listed camelCase names (`borderWidth`, `minHeight`, `itemWidth`, …), but HTML
+  stores attribute names lowercased and browsers match `observedAttributes` by
+  exact string — so changing any multi-word attribute (or its property setter)
+  after connect never fired `attributeChangedCallback` and silently did nothing.
+  Initial render was unaffected (styles apply on connect), which is why static
+  pages never noticed. All observed names are now lowercase; a regression test
+  guards the invariant, since happy-dom matches case-insensitively and hides
+  this class of bug from the unit suite.
+- **SSR-safe import.** The package crashed at import time without a DOM
+  (`window is not defined` in the registration guards, `HTMLElement is not
+  defined` in the base class). Registration is now guarded with
+  `typeof window !== 'undefined'` and the base class falls back to a plain
+  class outside the browser, so Node/SSR/prerender pipelines can import the
+  package; elements register client-side as before.
 - `styles.css`: the `max-inline-size: none` exemption list (`html`, `body`,
   `div`, …, `[data-role="layout"]`) is now wrapped in `:where()` so it has
   zero specificity. Previously the `[data-role="layout"]` attribute selector
@@ -18,6 +33,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   when `styles.css` was loaded, which also collapsed its auto margins and
   disabled centering entirely. The exemption still overrides the universal
   measure clamp above it via source order.
+
+### Added
+
+- `@rgoussu.dev/planks/structural` — a build-generated `structural.css`
+  containing every component's structural stylesheet, exactly as the runtime
+  would inject it. SSR and static consumers link it so layout applies before
+  (or without) JavaScript, eliminating the flash of unstyled layout.
+- Dynamic-update unit tests (one attribute per assertion, set after connect)
+  and a node-environment test asserting the package imports without a DOM.
+- README: "Dynamic apps & SPAs" (reactivity model, the framework `style`-binding
+  caveat, React/Vue/Svelte notes), "SSR & static sites", and attribute-casing
+  documentation.
 
 ## [0.2.1] - 2026-05-01
 

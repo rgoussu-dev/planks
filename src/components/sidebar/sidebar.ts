@@ -57,10 +57,10 @@ export default class Sidebar extends LayoutElementPk {
     get noStretch() { return this.hasAttribute('noStretch'); }
     set noStretch(value: boolean) { value ? this.setAttribute('noStretch', '') : this.removeAttribute('noStretch'); }
 
-    static get observedAttributes() { return ['side', 'sideWidth', 'contentWidth', 'space', 'noStretch']; }
+    static get observedAttributes() { return ['side', 'sidewidth', 'contentwidth', 'space', 'nostretch']; }
 }
 
-if ('customElements' in window && !customElements.get('sidebar-pk')) {
+if (typeof window !== 'undefined' && 'customElements' in window && !customElements.get('sidebar-pk')) {
     customElements.define('sidebar-pk', Sidebar);
 }
 

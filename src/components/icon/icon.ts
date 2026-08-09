@@ -34,7 +34,7 @@ export default class Icon extends LayoutElementPk {
     static get observedAttributes() { return ['space', 'label']; }
 }
 
-if ('customElements' in window && !customElements.get('icon-pk')) {
+if (typeof window !== 'undefined' && 'customElements' in window && !customElements.get('icon-pk')) {
     customElements.define('icon-pk', Icon);
 }
 

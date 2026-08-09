@@ -39,7 +39,7 @@ export default class Grid extends LayoutElementPk {
     static get observedAttributes() { return ['min', 'space', 'align', 'justify']; }
 }
 
-if ('customElements' in window && !customElements.get('grid-pk')) {
+if (typeof window !== 'undefined' && 'customElements' in window && !customElements.get('grid-pk')) {
     customElements.define('grid-pk', Grid);
 }
 
