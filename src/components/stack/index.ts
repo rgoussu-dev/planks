@@ -1,2 +1,2 @@
-export { default } from './stack';
+export { default, default as Stack } from './stack';
 export * from './stack';

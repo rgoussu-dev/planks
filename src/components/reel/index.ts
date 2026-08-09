@@ -1,2 +1,2 @@
-export { default } from './reel';
+export { default, default as Reel } from './reel';
 export * from './reel';
