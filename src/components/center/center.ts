@@ -38,10 +38,10 @@ export default class Center extends LayoutElementPk {
     get intrinsic() { return this.hasAttribute('intrinsic'); }
     set intrinsic(value: boolean) { value ? this.setAttribute('intrinsic', '') : this.removeAttribute('intrinsic'); }
 
-    static get observedAttributes() { return ['maxWidth', 'alignText', 'gutters', 'intrinsic']; }
+    static get observedAttributes() { return ['maxwidth', 'aligntext', 'gutters', 'intrinsic']; }
 }
 
-if ('customElements' in window && !customElements.get('center-pk')) {
+if (typeof window !== 'undefined' && 'customElements' in window && !customElements.get('center-pk')) {
     customElements.define('center-pk', Center);
 }
 

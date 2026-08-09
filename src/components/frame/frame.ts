@@ -41,7 +41,7 @@ export default class Frame extends LayoutElementPk {
     static get observedAttributes() { return ['ratio']; }
 }
 
-if ('customElements' in window && !customElements.get('frame-pk')) {
+if (typeof window !== 'undefined' && 'customElements' in window && !customElements.get('frame-pk')) {
     customElements.define('frame-pk', Frame);
 }
 

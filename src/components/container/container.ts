@@ -21,7 +21,7 @@ export default class Container extends LayoutElementPk {
     static get observedAttributes() { return ['name']; }
 }
 
-if ('customElements' in window && !customElements.get('container-pk')) {
+if (typeof window !== 'undefined' && 'customElements' in window && !customElements.get('container-pk')) {
     customElements.define('container-pk', Container);
 }
 

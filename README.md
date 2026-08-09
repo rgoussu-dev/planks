@@ -110,6 +110,34 @@ stack-pk[data-variant="tight"] > * + * {
 
 There is **no shadow boundary** — global resets, design tokens, and inherited typography all cascade in normally.
 
+### Attribute casing
+
+HTML stores attribute names lowercased, so `borderWidth="2px"`, `borderwidth="2px"`, and `el.setAttribute('borderWidth', …)` are all the same attribute. Planks observes the lowercase names internally; the camelCase spellings in this README (and in JSX) work as-is, both for initial render and for dynamic updates after the element is connected.
+
+## Dynamic apps & SPAs
+
+Planks components are stateless: state flows in through attributes (or the equivalent camelCase properties), layout behavior is pure CSS, and no events flow out. That makes them safe targets for any state-management approach — change an attribute and the element restyles; add or remove children and the CSS adapts on its own (`<cover-pk>`'s centered child, `<switcher-pk>`'s breakpoint, `<stack-pk>` spacing). `<reel-pk>` disconnects its internal observers when unmounted, so route-level mount/unmount churn doesn't leak.
+
+One rule: **don't bind your framework's `style` object to a `-pk` element** (React's `style={{…}}`, Vue's `:style`). Planks stores per-instance state as inline custom properties on `element.style`, and a framework-managed style binding rewrites that attribute on re-render, wiping them. Configure instances via attributes, or set the documented custom properties from a stylesheet rule instead — both survive re-renders.
+
+Framework notes:
+
+- **React** — works out of the box. Every planks value is a string, so React ≤18's attribute-only handling of custom elements is sufficient; React 19's property support routes through the same setters.
+- **Vue** — mark the tags as custom elements (`compilerOptions.isCustomElement: tag => tag.endsWith('-pk')`) and use them directly.
+- **Svelte / Lit / vanilla** — custom elements are the native currency; nothing extra needed.
+
+## SSR & static sites
+
+Importing the package without a DOM (Node, SSR, prerender pipelines) is safe: registration is skipped and no browser global is touched at import time. Elements upgrade client-side when the same import runs in the browser.
+
+Because structural CSS is normally injected on first client-side connect, server-rendered or static HTML would briefly render unstyled. To avoid that, link the prebuilt structural stylesheet — the exact CSS the runtime would inject, for all components:
+
+```ts
+import '@rgoussu.dev/planks/structural';  // or <link rel="stylesheet" href=".../structural.css">
+```
+
+Tag-scoped selectors apply before (and even without) JavaScript, so the page lays out correctly immediately; the runtime's own injection is idempotent-by-content and harmless alongside it. Note that per-instance *attributes* (`padding="2rem"`) only take effect once JS runs — if a page must be correct with no JavaScript at all, set the custom properties directly (`style="--box-padding: 2rem"`). Value-dependent rules (`<switcher-pk limit>`, `<stack-pk splitAfter>`) are generated at runtime and always need JS.
+
 ## TypeScript
 
 Planks ships full type definitions, including a `HTMLElementTagNameMap` augmentation. Side-effect importing the package is enough for the DOM APIs to be properly typed:

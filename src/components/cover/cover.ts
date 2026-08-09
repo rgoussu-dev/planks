@@ -37,10 +37,10 @@ export default class Cover extends LayoutElementPk {
     get noPad() { return this.hasAttribute('noPad'); }
     set noPad(value: boolean) { value ? this.setAttribute('noPad', '') : this.removeAttribute('noPad'); }
 
-    static get observedAttributes() { return ['space', 'minHeight', 'noPad']; }
+    static get observedAttributes() { return ['space', 'minheight', 'nopad']; }
 }
 
-if ('customElements' in window && !customElements.get('cover-pk')) {
+if (typeof window !== 'undefined' && 'customElements' in window && !customElements.get('cover-pk')) {
     customElements.define('cover-pk', Cover);
 }
 

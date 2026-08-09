@@ -94,11 +94,11 @@ export default class Typography extends LayoutElementPk {
     set variant(value: string) { this.setAttribute('variant', value); }
 
     static get observedAttributes() {
-        return ['fontFamily', 'fontSize', 'fontWeight', 'fontStyle', 'lineHeight', 'letterSpacing', 'textAlign', 'textTransform', 'textDecoration', 'color', 'variant'];
+        return ['fontfamily', 'fontsize', 'fontweight', 'fontstyle', 'lineheight', 'letterspacing', 'textalign', 'texttransform', 'textdecoration', 'color', 'variant'];
     }
 }
 
-if ('customElements' in window && !customElements.get('typography-pk')) {
+if (typeof window !== 'undefined' && 'customElements' in window && !customElements.get('typography-pk')) {
     customElements.define('typography-pk', Typography);
 }
 
