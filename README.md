@@ -1,6 +1,6 @@
 # @rgoussu.dev/planks
 
-Fundamental layout web components — a small set of every-layout-style primitives shipped as native custom elements.
+Fundamental layout web components — a small set of [Every Layout](https://every-layout.dev/)-style primitives shipped as native custom elements (see [Credits](#credits)).
 
 - **No framework.** Plain custom elements that work in any HTML page.
 - **No shadow DOM.** Light-DOM only, so your global tokens and resets cascade in.
@@ -30,7 +30,7 @@ import '@rgoussu.dev/planks/styles';   // global resets (optional)
 ```html
 <stack-pk space="var(--s2)">
   <box-pk padding="var(--s1)" borderWidth="1px" borderColor="#000">
-    <typography-pk variant="heading">Hello</typography-pk>
+    <typography-pk variant="heading-2">Hello</typography-pk>
     <typography-pk>Layout primitives, no framework.</typography-pk>
   </box-pk>
   <cluster-pk space="var(--s0)">
@@ -136,7 +136,7 @@ Because structural CSS is normally injected on first client-side connect, server
 import '@rgoussu.dev/planks/structural';  // or <link rel="stylesheet" href=".../structural.css">
 ```
 
-Tag-scoped selectors apply before (and even without) JavaScript, so the page lays out correctly immediately; the runtime's own injection is idempotent-by-content and harmless alongside it. Note that per-instance *attributes* (`padding="2rem"`) only take effect once JS runs — if a page must be correct with no JavaScript at all, set the custom properties directly (`style="--box-padding: 2rem"`). Value-dependent rules (`<switcher-pk limit>`, `<stack-pk splitAfter>`) are generated at runtime and always need JS.
+Tag-scoped selectors apply before (and even without) JavaScript, so the page lays out correctly immediately; the runtime still injects each component's sheet once on first connect, but since it's the exact same CSS it is harmless alongside the link. Note that per-instance *attributes* (`padding="2rem"`) only take effect once JS runs — if a page must be correct with no JavaScript at all, set the custom properties directly (`style="--box-padding: 2rem"`). Value-dependent rules (`<switcher-pk limit>`, `<stack-pk splitAfter>`) are generated at runtime and always need JS.
 
 ## TypeScript
 
@@ -200,7 +200,7 @@ Generic shape:
 |---|---|---|
 | `--box-padding` | `var(--s1)` | `padding` |
 | `--box-border-width` | `0` | `borderWidth` (`"none"` → `0`) |
-| `--box-border-color` | `transparent` | `borderColor` |
+| `--box-border-color` | `#000` | `borderColor` (invisible until `borderWidth` is set) |
 | `--box-border-radius` | `0` | `borderRadius` |
 | `--box-color` | `inherit` | `color` |
 | `--box-bg-color` | `transparent` | `backgroundColor` |
@@ -225,10 +225,16 @@ Generic shape:
 
 ### `<container-pk>`
 
-`<container-pk>` is the only component without instance-level custom properties — it's a structural anchor for `name`-scoped container queries. Override its layout with regular tag-scoped CSS:
+`<container-pk>` is the only component without instance-level custom properties — it's a structural anchor for container queries. Its structural CSS sets `container-type: inline-size`, and the `name` attribute sets `container-name` on the instance, so descendants can target it:
+
+```html
+<container-pk name="card"> … </container-pk>
+```
 
 ```css
-container-pk[name="card"] { container-type: inline-size; container-name: card; }
+@container card (max-width: 30rem) {
+  .card-body { flex-direction: column; }
+}
 ```
 
 ### `<cover-pk>`
@@ -261,6 +267,8 @@ container-pk[name="card"] { container-type: inline-size; container-name: card; }
 |---|---|---|
 | `--icon-space` | `0` | `space` (margin-inline-end when paired with text) |
 
+The `label` attribute makes the icon meaningful to assistive technology: it sets `role="img"` and `aria-label` on the element. Omit it for purely decorative icons.
+
 ### `<imposter-pk>`
 
 | Variable | Default | Maps to attribute |
@@ -278,6 +286,8 @@ The `breakout` boolean attribute disables the max-size clamp.
 | `--reel-item-width` | `auto` | `itemWidth` |
 | `--reel-space` | `var(--s0)` | `space` (gap between items) |
 
+By default an overflowing reel shows a styled high-contrast scrollbar; the `noBar` boolean attribute hides the scrollbar entirely (the reel still scrolls).
+
 While its content overflows, a reel makes itself keyboard-focusable (`tabindex="0"`) so keyboard users can scroll it; set your own `tabindex` to opt out — the reel never overrides one you provide. Give scrollable reels an accessible name (e.g. `aria-label="Photo gallery"`) so screen-reader users know what the region contains.
 
 ### `<sidebar-pk>`
@@ -285,7 +295,7 @@ While its content overflows, a reel makes itself keyboard-focusable (`tabindex="
 | Variable | Default | Maps to attribute |
 |---|---|---|
 | `--sidebar-space` | `var(--s2)` | `space` (gap between sidebar and content) |
-| `--sidebar-side-basis` | `0` | `sideWidth` (intrinsic sidebar size) |
+| `--sidebar-side-basis` | `250px` | `sideWidth` (intrinsic sidebar size) |
 | `--sidebar-content-min` | `50%` | `contentWidth` (content's minimum) |
 
 The `side` attribute (`"left"` | `"right"`) chooses which child is the sidebar; `noStretch` removes the equal-height behavior.
@@ -296,7 +306,7 @@ The `side` attribute (`"left"` | `"right"`) chooses which child is the sidebar; 
 |---|---|---|
 | `--stack-space` | `var(--s1)` | `space` |
 
-`recursive` applies the stack rule to all descendants; `splitAfter="N"` pushes the Nth child to the bottom.
+`recursive` applies the stack rule to all descendants; `splitAfter="N"` splits the stack after the Nth child, pushing everything that follows to the bottom.
 
 ### `<switcher-pk>`
 
@@ -330,8 +340,34 @@ The `variant` attribute (`"heading-1"`, `"heading-2"`, `"heading-3"`, `"body"`, 
 pnpm install
 pnpm storybook        # Storybook on :6006
 pnpm build            # vite lib build + .d.ts + tokens/styles
+pnpm test             # vitest (happy-dom)
 pnpm type-check
 ```
+
+## Credits
+
+Planks is a web-components take on the layout primitives from [**Every Layout**](https://every-layout.dev/) by [**Heydon Pickering**](https://heydonworks.com/) and [**Andy Bell**](https://bell.bz/) — all credit for the layout concepts, the algorithmic-CSS approach, and the composition model belongs to them. The modular scale tokens (`--ratio`, `--s-10`…`--s10`), the `--measure` axiom applied in `styles.css`, and the high-contrast reel scrollbar styling also come straight from their work. If you want to understand *why* these layouts are built the way they are, [buy the book](https://every-layout.dev/) — it's excellent.
+
+Each primitive and its original layout:
+
+| Planks element | Every Layout primitive |
+|---|---|
+| `<stack-pk>` | [The Stack](https://every-layout.dev/layouts/stack/) |
+| `<box-pk>` | [The Box](https://every-layout.dev/layouts/box/) |
+| `<center-pk>` | [The Center](https://every-layout.dev/layouts/center/) |
+| `<cluster-pk>` | [The Cluster](https://every-layout.dev/layouts/cluster/) |
+| `<sidebar-pk>` | [The Sidebar](https://every-layout.dev/layouts/sidebar/) |
+| `<switcher-pk>` | [The Switcher](https://every-layout.dev/layouts/switcher/) |
+| `<cover-pk>` | [The Cover](https://every-layout.dev/layouts/cover/) |
+| `<grid-pk>` | [The Grid](https://every-layout.dev/layouts/grid/) |
+| `<frame-pk>` | [The Frame](https://every-layout.dev/layouts/frame/) |
+| `<reel-pk>` | [The Reel](https://every-layout.dev/layouts/reel/) |
+| `<imposter-pk>` | [The Imposter](https://every-layout.dev/layouts/imposter/) |
+| `<icon-pk>` | [The Icon](https://every-layout.dev/layouts/icon/) |
+
+`<container-pk>` and `<typography-pk>` are planks additions with no Every Layout counterpart.
+
+Planks is an independent project and is not affiliated with or endorsed by the Every Layout authors.
 
 ## License
 
